@@ -1,69 +1,120 @@
-import Image from "next/image";
+import Link from "next/link";
+import { doctor, reviews } from "@/lib/data";
+import { SocialLinks } from "@/components/SocialLinks";
+import { ReviewCard } from "@/components/ReviewCard";
+import { ContactSection } from "@/components/ContactSection";
+import { SectionTitle } from "@/components/SectionTitle";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <>
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-emerald-600 to-emerald-800 text-white">
+        <div className="absolute inset-0 opacity-10">
+          <svg className="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <defs>
+              <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" strokeWidth="0.5" />
+              </pattern>
+            </defs>
+            <rect width="100" height="100" fill="url(#grid)" />
+          </svg>
+        </div>
+
+        <div className="relative mx-auto flex max-w-6xl flex-col items-center gap-10 px-4 py-20 sm:px-6 lg:flex-row lg:py-28">
+          <div className="flex-shrink-0">
+            <div className="relative h-48 w-48 overflow-hidden rounded-full border-4 border-white/30 shadow-2xl sm:h-56 sm:w-56">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={doctor.photo}
+                alt={doctor.name}
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </div>
+
+          <div className="flex-1 text-center lg:text-left">
+            <p className="mb-2 text-sm font-medium uppercase tracking-widest text-emerald-200">
+              {doctor.title}
+            </p>
+            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+              {doctor.name}
+            </h1>
+            <p className="mt-4 max-w-xl text-lg leading-relaxed text-emerald-100">
+              {doctor.shortBio}
+            </p>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
+              <Link
+                href="/services"
+                className="rounded-xl bg-white px-6 py-3 text-sm font-semibold text-emerald-700 transition-colors hover:bg-emerald-50"
+              >
+                Записаться на консультацию
+              </Link>
+              <Link
+                href="/about"
+                className="rounded-xl border border-white/40 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+              >
+                Подробнее обо мне
+              </Link>
+            </div>
+            <div className="mt-8 flex justify-center lg:justify-start">
+              <SocialLinks />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* About preview */}
+      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <SectionTitle
+          title="О специалисте"
+          subtitle="Индивидуальный подход к каждому пациенту"
+          centered
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="text-lg leading-relaxed text-zinc-600">{doctor.fullBio}</p>
+          <div className="mt-8 flex flex-wrap justify-center gap-6">
+            <Stat value={`${doctor.experienceYears}+`} label="лет опыта" />
+            <Stat value="500+" label="довольных клиентов" />
+            <Stat value="4.9" label="средняя оценка" />
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* Reviews */}
+      <section className="bg-emerald-50/60 py-16">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <SectionTitle
+            title="Отзывы пациентов"
+            subtitle="Что говорят те, кому я уже помогла"
+            centered
+          />
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {reviews.map((review) => (
+              <ReviewCard key={review.id} {...review} />
+            ))}
+          </div>
         </div>
-      </main>
+      </section>
+
+      {/* Contacts */}
+      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <SectionTitle
+          title="Контакты"
+          subtitle="Свяжитесь со мной удобным способом"
+          centered
+        />
+        <ContactSection />
+      </section>
+    </>
+  );
+}
+
+function Stat({ value, label }: { value: string; label: string }) {
+  return (
+    <div className="text-center">
+      <p className="text-3xl font-bold text-emerald-700">{value}</p>
+      <p className="mt-1 text-sm text-zinc-500">{label}</p>
     </div>
   );
 }
