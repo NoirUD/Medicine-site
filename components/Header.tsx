@@ -2,9 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { navLinks, doctor } from "@/lib/data";
+import { navLinks } from "@/lib/constants";
+import type { SiteData } from "@/lib/types";
 
-export function Header() {
+type HeaderProps = {
+  doctor: SiteData["doctor"];
+};
+
+export function Header({ doctor }: HeaderProps) {
   const pathname = usePathname();
 
   return (

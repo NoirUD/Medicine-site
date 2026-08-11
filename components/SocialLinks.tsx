@@ -1,4 +1,4 @@
-import { socialLinks } from "@/lib/data";
+import { getSocialLinks } from "@/lib/data";
 
 const icons: Record<string, React.ReactNode> = {
   telegram: (
@@ -22,7 +22,8 @@ type SocialLinksProps = {
   variant?: "default" | "footer";
 };
 
-export function SocialLinks({ variant = "default" }: SocialLinksProps) {
+export async function SocialLinks({ variant = "default" }: SocialLinksProps) {
+  const socialLinks = await getSocialLinks();
   const linkClass =
     variant === "footer"
       ? "flex h-10 w-10 items-center justify-center rounded-full bg-emerald-800 text-emerald-100 transition-colors hover:bg-emerald-700 hover:text-white"

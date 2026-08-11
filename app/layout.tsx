@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { doctor } from "@/lib/data";
+import { getDoctor } from "@/lib/data";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -15,25 +13,24 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: `${doctor.name} — ${doctor.title}`,
-    template: `%s | ${doctor.name}`,
-  },
-  description: doctor.shortBio,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const doctor = await getDoctor();
+  return {
+    title: {
+      default: `${doctor.name} — ${doctor.title}`,
+      template: `%s | ${doctor.name}`,
+    },
+    description: doctor.shortBio,
+  };
+}
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="ru"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-zinc-50 text-zinc-900">
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
-      </body>
+      <body className="min-h-full bg-zinc-50 text-zinc-900">{children}</body>
     </html>
   );
 }

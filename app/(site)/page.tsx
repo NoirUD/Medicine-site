@@ -1,14 +1,15 @@
 import Link from "next/link";
-import { doctor, reviews } from "@/lib/data";
+import { getDoctor } from "@/lib/data";
 import { SocialLinks } from "@/components/SocialLinks";
-import { ReviewCard } from "@/components/ReviewCard";
+import { ReviewsSection } from "@/components/ReviewsSection";
 import { ContactSection } from "@/components/ContactSection";
 import { SectionTitle } from "@/components/SectionTitle";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const doctor = await getDoctor();
+
   return (
     <>
-      {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-emerald-600 to-emerald-800 text-white">
         <div className="absolute inset-0 opacity-10">
           <svg className="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -64,7 +65,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* About preview */}
       <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
         <SectionTitle
           title="О специалисте"
@@ -81,23 +81,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Reviews */}
-      <section className="bg-emerald-50/60 py-16">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <SectionTitle
-            title="Отзывы пациентов"
-            subtitle="Что говорят те, кому я уже помогла"
-            centered
-          />
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {reviews.map((review) => (
-              <ReviewCard key={review.id} {...review} />
-            ))}
-          </div>
-        </div>
-      </section>
+      <ReviewsSection />
 
-      {/* Contacts */}
       <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
         <SectionTitle
           title="Контакты"

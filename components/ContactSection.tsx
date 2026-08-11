@@ -1,6 +1,8 @@
-import { contacts } from "@/lib/data";
+import { getContacts } from "@/lib/data";
 
-export function ContactSection() {
+export async function ContactSection() {
+  const contacts = await getContacts();
+
   return (
     <section id="contacts" className="scroll-mt-24">
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

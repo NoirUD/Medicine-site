@@ -1,15 +1,41 @@
-import { doctor, education, documents, workPlaces, professionalAchievements, personalAchievements } from "@/lib/data";
+import {
+  getDoctor,
+  getEducation,
+  getDocuments,
+  getWorkPlaces,
+  getProfessionalAchievements,
+  getPersonalAchievements,
+} from "@/lib/data";
 import { SectionTitle } from "@/components/SectionTitle";
+import { DocumentGallery } from "@/components/DocumentGallery";
 
-export const metadata = {
-  title: "Обо мне",
-  description: `Профессиональный путь ${doctor.name} — образование, опыт работы и достижения`,
-};
+export async function generateMetadata() {
+  const doctor = await getDoctor();
+  return {
+    title: "Обо мне",
+    description: `Профессиональный путь ${doctor.name} — образование, опыт работы и достижения`,
+  };
+}
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const [
+    doctor,
+    education,
+    documents,
+    workPlaces,
+    professionalAchievements,
+    personalAchievements,
+  ] = await Promise.all([
+    getDoctor(),
+    getEducation(),
+    getDocuments(),
+    getWorkPlaces(),
+    getProfessionalAchievements(),
+    getPersonalAchievements(),
+  ]);
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
-      {/* Header */}
       <div className="mb-12 flex flex-col items-center gap-6 text-center sm:flex-row sm:text-left">
         <div className="h-32 w-32 flex-shrink-0 overflow-hidden rounded-full border-4 border-emerald-100 shadow-lg">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -22,7 +48,6 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* Profession */}
       <section className="mb-14">
         <SectionTitle title="Профессия" />
         <div className="rounded-2xl border border-emerald-100 bg-emerald-50/50 p-6">
@@ -37,7 +62,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Education */}
       <section className="mb-14">
         <SectionTitle title="Образование" />
         <div className="space-y-4">
@@ -56,30 +80,14 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Documents */}
       <section className="mb-14">
-        <SectionTitle title="Дипломы и документы" />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {documents.map((doc) => (
-            <div
-              key={doc.title}
-              className="flex items-start gap-4 rounded-2xl border border-emerald-100 bg-white p-5"
-            >
-              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-              </div>
-              <div>
-                <p className="font-semibold text-zinc-900">{doc.title}</p>
-                <p className="mt-1 text-sm text-zinc-500">{doc.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <SectionTitle
+          title="Дипломы и документы"
+          subtitle="Витрина сертификатов, дипломов и подтверждающих документов"
+        />
+        <DocumentGallery documents={documents} />
       </section>
 
-      {/* Work places */}
       <section className="mb-14">
         <SectionTitle title="Места работы" subtitle="Профессиональный путь" />
         <div className="relative space-y-0">
@@ -106,7 +114,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Achievements */}
       <div className="grid gap-8 lg:grid-cols-2">
         <section>
           <SectionTitle title="Профессиональные достижения" />

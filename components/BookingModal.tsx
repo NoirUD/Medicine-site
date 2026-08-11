@@ -6,12 +6,14 @@ import { BookingForm } from "./BookingForm";
 type BookingModalProps = {
   serviceName: string;
   serviceId: string;
+  contactEmail: string;
   triggerLabel?: string;
 };
 
 export function BookingModal({
   serviceName,
   serviceId,
+  contactEmail,
   triggerLabel = "Записаться",
 }: BookingModalProps) {
   const [open, setOpen] = useState(false);
@@ -48,7 +50,11 @@ export function BookingModal({
                 </svg>
               </button>
             </div>
-            <BookingForm serviceName={serviceName} serviceId={serviceId} />
+            <BookingForm
+              serviceName={serviceName}
+              serviceId={serviceId}
+              contactEmail={contactEmail}
+            />
           </div>
         </div>
       )}

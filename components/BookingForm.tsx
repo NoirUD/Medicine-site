@@ -1,14 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { contacts } from "@/lib/data";
-
 type BookingFormProps = {
   serviceName?: string;
   serviceId?: string;
+  contactEmail: string;
 };
 
-export function BookingForm({ serviceName, serviceId }: BookingFormProps) {
+export function BookingForm({ serviceName, serviceId, contactEmail }: BookingFormProps) {
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
     name: "",
@@ -38,7 +37,7 @@ export function BookingForm({ serviceName, serviceId }: BookingFormProps) {
         .join("\n"),
     );
 
-    window.location.href = `mailto:${contacts.email}?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
     setSubmitted(true);
   }
 
