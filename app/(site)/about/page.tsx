@@ -1,13 +1,16 @@
 import {
   getDoctor,
   getEducation,
-  getDocuments,
+  getEducationalDocuments,
+  getLegalDocuments,
   getWorkPlaces,
   getProfessionalAchievements,
   getPersonalAchievements,
 } from "@/lib/data";
 import { SectionTitle } from "@/components/SectionTitle";
 import { DocumentGallery } from "@/components/DocumentGallery";
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
   const doctor = await getDoctor();
@@ -21,14 +24,14 @@ export default async function AboutPage() {
   const [
     doctor,
     education,
-    documents,
+    educationalDocuments,
     workPlaces,
     professionalAchievements,
     personalAchievements,
   ] = await Promise.all([
     getDoctor(),
     getEducation(),
-    getDocuments(),
+    getEducationalDocuments(),
     getWorkPlaces(),
     getProfessionalAchievements(),
     getPersonalAchievements(),
@@ -53,8 +56,8 @@ export default async function AboutPage() {
         <div className="rounded-2xl border border-emerald-100 bg-emerald-50/50 p-6">
           <p className="text-lg font-semibold text-zinc-900">{doctor.title}</p>
           <p className="mt-2 text-zinc-600">
-            Специализируюсь на клинической диетологии, нутрициологии и коррекции пищевого
-            поведения. Работаю с пациентами всех возрастов.
+            Врач-терапевт, диетолог и липидолог. Очный приём в «СМ-Клинике» и онлайн-консультации
+            из любого региона.
           </p>
           <p className="mt-3 text-sm font-medium text-emerald-700">
             Общий стаж: {doctor.experienceYears} лет
@@ -80,12 +83,12 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section className="mb-14">
+      <section className="mb-14" id="documents">
         <SectionTitle
-          title="Дипломы и документы"
-          subtitle="Витрина сертификатов, дипломов и подтверждающих документов"
+          title="Дипломы и сертификаты"
+          subtitle="Образовательные документы: дипломы, сертификаты, удостоверения о повышении квалификации"
         />
-        <DocumentGallery documents={documents} />
+        <DocumentGallery documents={educationalDocuments} emptyMessage="Дипломы и сертификаты скоро будут добавлены." />
       </section>
 
       <section className="mb-14">
@@ -116,7 +119,7 @@ export default async function AboutPage() {
 
       <div className="grid gap-8 lg:grid-cols-2">
         <section>
-          <SectionTitle title="Профессиональные достижения" />
+          <SectionTitle title="С чем помогаю" />
           <ul className="space-y-3">
             {professionalAchievements.map((item) => (
               <li
@@ -133,7 +136,7 @@ export default async function AboutPage() {
         </section>
 
         <section>
-          <SectionTitle title="Личные достижения" />
+          <SectionTitle title="Достижения" />
           <ul className="space-y-3">
             {personalAchievements.map((item) => (
               <li

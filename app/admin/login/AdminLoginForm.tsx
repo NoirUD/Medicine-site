@@ -22,8 +22,20 @@ export default function AdminLoginForm() {
         body: JSON.stringify({ password }),
       });
 
+      const data = (await res.json().catch(() => null)) as { error?: string } | null;
+
+      if (res.status === 429) {
+        setError(data?.error ?? "Слишком много попыток. Попробуйте позже.");
+        return;
+      }
+
+      if (res.status === 503) {
+        setError(data?.error ?? "Авторизация не настроена на сервере.");
+        return;
+      }
+
       if (!res.ok) {
-        setError("Неверный пароль");
+        setError(data?.error ?? "Неверный пароль");
         return;
       }
 
@@ -68,9 +80,6 @@ export default function AdminLoginForm() {
           {loading ? "Вход..." : "Войти"}
         </button>
 
-        <p className="mt-4 text-center text-xs text-zinc-400">
-          Пароль задаётся через переменную окружения ADMIN_PASSWORD
-        </p>
       </form>
     </div>
   );

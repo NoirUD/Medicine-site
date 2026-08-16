@@ -30,11 +30,23 @@ export type Education = {
   year: string;
 };
 
+export type DocumentCategory = "educational" | "legal";
+
 export type DocumentItem = {
   id: string;
   title: string;
   description: string;
+  category?: DocumentCategory;
   fileUrl?: string;
+  fileName?: string;
+  mimeType?: string;
+  uploadedAt?: string;
+};
+
+export type GalleryPhoto = {
+  id: string;
+  description: string;
+  fileUrl: string;
   fileName?: string;
   mimeType?: string;
   uploadedAt?: string;
@@ -73,7 +85,9 @@ export type SiteData = {
   socialLinks: SocialLink[];
   reviews: Review[];
   education: Education[];
-  documents: DocumentItem[];
+  educationalDocuments: DocumentItem[];
+  legalDocuments: DocumentItem[];
+  galleryPhotos: GalleryPhoto[];
   workPlaces: WorkPlace[];
   professionalAchievements: string[];
   personalAchievements: string[];

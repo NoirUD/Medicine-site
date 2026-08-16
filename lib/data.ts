@@ -25,9 +25,19 @@ export async function getEducation() {
   return site.education;
 }
 
-export async function getDocuments() {
+export async function getEducationalDocuments() {
   const site = await getSiteData();
-  return site.documents;
+  return site.educationalDocuments;
+}
+
+export async function getLegalDocuments() {
+  const site = await getSiteData();
+  return site.legalDocuments;
+}
+
+export async function getGalleryPhotos() {
+  const site = await getSiteData();
+  return site.galleryPhotos;
 }
 
 export async function getWorkPlaces() {

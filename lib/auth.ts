@@ -1,47 +1,97 @@
-import crypto from "crypto";
+import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
 
 const SESSION_COOKIE = "admin_session";
-const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+const SESSION_TTL_MS = 2 * 24 * 60 * 60 * 1000;
 
-function getSecret() {
-  return process.env.ADMIN_PASSWORD || "admin123";
+function getSessionSecret(): string {
+  const secret = process.env.SESSION_SECRET;
+  if (!secret) {
+    throw new Error("SESSION_SECRET is not configured");
+  }
+  return secret;
 }
 
-export function verifyPassword(password: string): boolean {
-  return password === getSecret();
+function base64UrlEncode(bytes: Uint8Array): string {
+  let binary = "";
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 }
 
-export function createSessionToken(): string {
-  const payload = Buffer.from(
-    JSON.stringify({ exp: Date.now() + SESSION_TTL_MS }),
-  ).toString("base64url");
-  const signature = crypto
-    .createHmac("sha256", getSecret())
-    .update(payload)
-    .digest("base64url");
+function base64UrlDecode(str: string): Uint8Array {
+  const base64 = str.replace(/-/g, "+").replace(/_/g, "/");
+  const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
+  const binary = atob(padded);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return bytes;
+}
+
+function timingSafeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let result = 0;
+  for (let i = 0; i < a.length; i++) {
+    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return result === 0;
+}
+
+async function signPayload(payload: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(getSessionSecret()),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+  const signature = await crypto.subtle.sign("HMAC", key, encoder.encode(payload));
+  return base64UrlEncode(new Uint8Array(signature));
+}
+
+function getPasswordHash(): string | undefined {
+  const hash = process.env.ADMIN_PASSWORD_HASH?.trim();
+  if (!hash) return undefined;
+  if (!hash.startsWith("$2")) {
+    console.error(
+      "ADMIN_PASSWORD_HASH looks invalid. Wrap the bcrypt hash in single quotes inside .env.local",
+    );
+    return undefined;
+  }
+  return hash;
+}
+
+export function isAuthConfigured(): boolean {
+  return Boolean(getPasswordHash() && process.env.SESSION_SECRET?.trim());
+}
+
+export async function verifyPassword(password: string): Promise<boolean> {
+  const hash = getPasswordHash();
+  if (!hash) return false;
+  return bcrypt.compare(password, hash);
+}
+
+export async function createSessionToken(): Promise<string> {
+  const payload = base64UrlEncode(
+    new TextEncoder().encode(JSON.stringify({ exp: Date.now() + SESSION_TTL_MS })),
+  );
+  const signature = await signPayload(payload);
   return `${payload}.${signature}`;
 }
 
-export function verifySessionToken(token: string | undefined): boolean {
+export async function verifySessionToken(token: string | undefined): Promise<boolean> {
   if (!token) return false;
+  if (!process.env.SESSION_SECRET) return false;
+
   const [payload, signature] = token.split(".");
   if (!payload || !signature) return false;
 
-  const expected = crypto
-    .createHmac("sha256", getSecret())
-    .update(payload)
-    .digest("base64url");
-
-  if (signature.length !== expected.length) return false;
-  if (!crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected))) {
-    return false;
-  }
-
   try {
-    const data = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as {
-      exp: number;
-    };
+    const expected = await signPayload(payload);
+    if (!timingSafeEqual(signature, expected)) return false;
+
+    const json = new TextDecoder().decode(base64UrlDecode(payload));
+    const data = JSON.parse(json) as { exp: number };
     return data.exp > Date.now();
   } catch {
     return false;
@@ -50,7 +100,7 @@ export function verifySessionToken(token: string | undefined): boolean {
 
 export async function isAdminAuthenticated(): Promise<boolean> {
   const cookieStore = await cookies();
-  return verifySessionToken(cookieStore.get(SESSION_COOKIE)?.value);
+  return await verifySessionToken(cookieStore.get(SESSION_COOKIE)?.value);
 }
 
 export { SESSION_COOKIE, SESSION_TTL_MS };

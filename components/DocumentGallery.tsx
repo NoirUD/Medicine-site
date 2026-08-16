@@ -5,15 +5,16 @@ import type { DocumentItem } from "@/lib/types";
 
 type DocumentGalleryProps = {
   documents: DocumentItem[];
+  emptyMessage?: string;
 };
 
-export function DocumentGallery({ documents }: DocumentGalleryProps) {
+export function DocumentGallery({ documents, emptyMessage }: DocumentGalleryProps) {
   const [lightbox, setLightbox] = useState<DocumentItem | null>(null);
 
   if (documents.length === 0) {
     return (
       <p className="text-center text-sm text-zinc-500">
-        Документы скоро будут добавлены.
+        {emptyMessage ?? "Документы скоро будут добавлены."}
       </p>
     );
   }

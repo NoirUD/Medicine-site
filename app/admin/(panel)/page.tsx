@@ -8,8 +8,13 @@ export default async function AdminOverviewPage() {
   return (
     <AdminShell title="Обзор">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Документы" value={site.documents.length} href="/admin/documents" />
+        <StatCard
+          label="Документы"
+          value={site.educationalDocuments.length + site.legalDocuments.length}
+          href="/admin/documents"
+        />
         <StatCard label="Услуги" value={site.services.length} href="/admin/content" />
+        <StatCard label="Галерея" value={site.galleryPhotos.length} href="/admin/gallery" />
         <StatCard label="Ручные отзывы" value={site.reviews.length} href="/admin/content" />
         <StatCard label="Опыт" value={`${site.doctor.experienceYears} лет`} href="/admin/content" />
       </div>
@@ -25,6 +30,11 @@ export default async function AdminOverviewPage() {
           <li>
             <Link href="/admin/documents" className="text-emerald-700 hover:underline">
               Загрузить диплом или сертификат
+            </Link>
+          </li>
+          <li>
+            <Link href="/admin/gallery" className="text-emerald-700 hover:underline">
+              Загрузить фото в галерею
             </Link>
           </li>
           <li>

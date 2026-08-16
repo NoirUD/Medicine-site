@@ -7,7 +7,10 @@ export default async function AdminDocumentsPage() {
 
   return (
     <AdminShell title="Документы">
-      <DocumentsManager initialDocuments={site.documents} />
+      <DocumentsManager
+        initialEducational={site.educationalDocuments}
+        initialLegal={site.legalDocuments}
+      />
     </AdminShell>
   );
 }
