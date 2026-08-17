@@ -5,6 +5,7 @@ export const navLinks = [
   { href: "/about", label: "Обо мне" },
   { href: "/gallery", label: "Галерея" },
   { href: "/services", label: "Услуги" },
+  { href: "/faq", label: "FAQ" },
 ];
 
 export const doctor = defaultSiteData.doctor;
