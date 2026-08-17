@@ -1,4 +1,3 @@
-import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
 
 const SESSION_COOKIE = "admin_session";
@@ -49,26 +48,18 @@ async function signPayload(payload: string): Promise<string> {
   return base64UrlEncode(new Uint8Array(signature));
 }
 
-function getPasswordHash(): string | undefined {
-  const hash = process.env.ADMIN_PASSWORD_HASH?.trim();
-  if (!hash) return undefined;
-  if (!hash.startsWith("$2")) {
-    console.error(
-      "ADMIN_PASSWORD_HASH looks invalid. Wrap the bcrypt hash in single quotes inside .env.local",
-    );
-    return undefined;
-  }
-  return hash;
+function getAdminPassword(): string | undefined {
+  return process.env.ADMIN_PASSWORD?.trim() || undefined;
 }
 
 export function isAuthConfigured(): boolean {
-  return Boolean(getPasswordHash() && process.env.SESSION_SECRET?.trim());
+  return Boolean(getAdminPassword() && process.env.SESSION_SECRET?.trim());
 }
 
 export async function verifyPassword(password: string): Promise<boolean> {
-  const hash = getPasswordHash();
-  if (!hash) return false;
-  return bcrypt.compare(password, hash);
+  const adminPassword = getAdminPassword();
+  if (!adminPassword) return false;
+  return password === adminPassword;
 }
 
 export async function createSessionToken(): Promise<string> {

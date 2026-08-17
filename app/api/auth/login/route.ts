@@ -38,7 +38,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         error:
-          "Авторизация не настроена. Проверьте ADMIN_PASSWORD_HASH и SESSION_SECRET в .env.local (хеш bcrypt нужно брать в одинарные кавычки).",
+          "Авторизация не настроена. Проверьте ADMIN_PASSWORD и SESSION_SECRET в .env.local.",
       },
       { status: 503 },
     );
