@@ -52,6 +52,13 @@ export type GalleryPhoto = {
   uploadedAt?: string;
 };
 
+export type Article = {
+  id: string;
+  title: string;
+  content: string;
+  date: string;
+};
+
 export type WorkPlace = {
   place: string;
   role: string;
@@ -88,6 +95,7 @@ export type SiteData = {
   educationalDocuments: DocumentItem[];
   legalDocuments: DocumentItem[];
   galleryPhotos: GalleryPhoto[];
+  articles: Article[];
   workPlaces: WorkPlace[];
   professionalAchievements: string[];
   personalAchievements: string[];

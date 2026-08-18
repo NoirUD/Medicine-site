@@ -20,5 +20,6 @@ export async function PUT(request: Request) {
   revalidatePath("/about");
   revalidatePath("/services");
   revalidatePath("/gallery");
+  revalidatePath("/articles");
   return NextResponse.json({ ok: true });
 }

@@ -3,6 +3,7 @@ import { defaultSiteData } from "./defaults";
 export const navLinks = [
   { href: "/", label: "Главная" },
   { href: "/about", label: "Обо мне" },
+  { href: "/articles", label: "Статьи" },
   { href: "/gallery", label: "Галерея" },
   { href: "/services", label: "Услуги" },
   { href: "/faq", label: "FAQ" },
@@ -16,6 +17,7 @@ export const education = defaultSiteData.education;
 export const educationalDocuments = defaultSiteData.educationalDocuments;
 export const legalDocuments = defaultSiteData.legalDocuments;
 export const galleryPhotos = defaultSiteData.galleryPhotos;
+export const articles = defaultSiteData.articles;
 export const workPlaces = defaultSiteData.workPlaces;
 export const professionalAchievements = defaultSiteData.professionalAchievements;
 export const personalAchievements = defaultSiteData.personalAchievements;

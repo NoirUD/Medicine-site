@@ -38,6 +38,7 @@ export const defaultSiteData: SiteData = {
   educationalDocuments: [],
   legalDocuments: [],
   galleryPhotos: [],
+  articles: [],
   workPlaces: [
     {
       place: "Участковый терапевт",

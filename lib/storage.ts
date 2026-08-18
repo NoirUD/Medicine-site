@@ -23,6 +23,7 @@ function migrateSiteData(raw: Partial<SiteData> & { documents?: SiteData["educat
 
   const legal = raw.legalDocuments ?? defaultSiteData.legalDocuments;
   const galleryPhotos = raw.galleryPhotos ?? defaultSiteData.galleryPhotos;
+  const articles = raw.articles ?? defaultSiteData.articles;
 
   return {
     ...defaultSiteData,
@@ -32,6 +33,7 @@ function migrateSiteData(raw: Partial<SiteData> & { documents?: SiteData["educat
     educationalDocuments: educational,
     legalDocuments: legal,
     galleryPhotos,
+    articles,
   };
 }
 

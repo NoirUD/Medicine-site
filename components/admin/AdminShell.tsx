@@ -8,6 +8,7 @@ const links = [
   { href: "/admin/content", label: "Контент сайта" },
   { href: "/admin/documents", label: "Документы" },
   { href: "/admin/gallery", label: "Галерея" },
+  { href: "/admin/articles", label: "Статьи" },
   { href: "/admin/reviews", label: "Отзывы" },
 ];
 

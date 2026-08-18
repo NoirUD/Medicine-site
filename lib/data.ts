@@ -40,6 +40,11 @@ export async function getGalleryPhotos() {
   return site.galleryPhotos;
 }
 
+export async function getArticles() {
+  const site = await getSiteData();
+  return site.articles;
+}
+
 export async function getWorkPlaces() {
   const site = await getSiteData();
   return site.workPlaces;

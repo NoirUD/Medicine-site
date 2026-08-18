@@ -15,6 +15,7 @@ export default async function AdminOverviewPage() {
         />
         <StatCard label="Услуги" value={site.services.length} href="/admin/content" />
         <StatCard label="Галерея" value={site.galleryPhotos.length} href="/admin/gallery" />
+        <StatCard label="Статьи" value={site.articles.length} href="/admin/articles" />
         <StatCard label="Ручные отзывы" value={site.reviews.length} href="/admin/content" />
         <StatCard label="Опыт" value={`${site.doctor.experienceYears} лет`} href="/admin/content" />
       </div>
@@ -35,6 +36,11 @@ export default async function AdminOverviewPage() {
           <li>
             <Link href="/admin/gallery" className="text-emerald-700 hover:underline">
               Загрузить фото в галерею
+            </Link>
+          </li>
+          <li>
+            <Link href="/admin/articles" className="text-emerald-700 hover:underline">
+              Добавить статью
             </Link>
           </li>
           <li>
